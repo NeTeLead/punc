@@ -1,6 +1,6 @@
 # coding: utf-8
 
-
+from __future__ import division
 
 import models
 import data
@@ -89,17 +89,17 @@ if __name__ == "__main__":
 
     x = T.imatrix('x')
 
-    print("Loading model parameters...")
+    print "Loading model parameters..."
     net, _ = models.load(model_file, 1, x)
 
-    print("Building model...")
+    print "Building model..."
     predict = theano.function(inputs=[x], outputs=net.y)
     word_vocabulary = net.x_vocabulary
     punctuation_vocabulary = net.y_vocabulary
-    reverse_word_vocabulary = {v:k for k,v in list(net.x_vocabulary.items())}
-    reverse_punctuation_vocabulary = {v:k for k,v in list(net.y_vocabulary.items())}
+    reverse_word_vocabulary = {v:k for k,v in net.x_vocabulary.items()}
+    reverse_punctuation_vocabulary = {v:k for k,v in net.y_vocabulary.items()}
 
     with codecs.getwriter('utf-8')(sys.stdout) as f_out:
         while True:
-            text = input("\nTEXT: ").decode('utf-8')
+            text = raw_input("\nTEXT: ").decode('utf-8')
             punctuate(predict, word_vocabulary, punctuation_vocabulary, reverse_punctuation_vocabulary, reverse_word_vocabulary, text, f_out, show_unk)
